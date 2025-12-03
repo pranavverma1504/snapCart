@@ -8,7 +8,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // Providers
   
   providers: [
-    // 1 Credentials Login
+    //  Credentials Login
     Credentials({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password)
