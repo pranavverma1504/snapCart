@@ -20,6 +20,7 @@ import googleImage from "@/assets/google.svg";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import { signIn, useSession } from "next-auth/react";
 import Welcome from "@/components/Welcome";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +33,13 @@ const [password,setPassword]=useState("")
   const [loading, setLoading] = useState(false); // ✅ Loading state
 const router=useRouter()
   
+const handleGoogleLogin = () => {
+  // role + mobile ko ek JSON string me encode karo
+
+  signIn("google", {
+    callbackUrl: "/" // 👈 yahan bhejna hai
+  });
+};
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +176,7 @@ const router=useRouter()
             <button
               type="button"
               className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200"
-              
+              onClick={handleGoogleLogin}
             >
               <Image src={googleImage} alt="Google logo" className="w-5 h-5" />
               Continue with Google

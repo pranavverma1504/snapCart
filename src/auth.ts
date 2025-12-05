@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import connectDb from "@/lib/db";
 import User from "@/models/user.model";
@@ -33,13 +34,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       },
     }),
-
+    //  Google Login
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
 
   ],
 
   // Callbacks
   
   callbacks: {
+
+    // 1️⃣ Ensure Google users have a role
+    async signIn({ account, user }) {
+      if (account?.provider === "google") {
+        await connectDb();
+        let dbUser = await User.findOne({ email: user.email });
+
+        if (!dbUser) {
+          // Create new user with default role
+          dbUser = await User.create({
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            role:user?.role || "user", // ✅ default role
+          });
+        }
+
+        // Inject DB info into NextAuth's user object
+        user.id = dbUser._id.toString();
+        user.role = dbUser.role; // ✅ attach role manually
+      }
+
+      return true;
+    },
     
     //  token k andr user k data dalna
     async jwt({ token, user }) {

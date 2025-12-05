@@ -4,6 +4,7 @@ interface IUser {
   _id?: mongoose.Types.ObjectId ;
   name: string;
   role: "admin" | "user" | "deliveryBoy";
+  image?: string;
   email: string;
   mobile?: string;
   password?: string;
@@ -35,7 +36,9 @@ const userSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
     },
-    
+    image: {
+      type: String,
+    },
   
 }, { timestamps: true })
 
