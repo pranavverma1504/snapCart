@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import EditRoleMobile from "@/components/EditRoleMobile";
+import Nav from "@/components/Nav";
 import connectDb from "@/lib/db";
 import User from "@/models/user.model";
 import { redirect } from "next/navigation";
@@ -29,7 +30,8 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-     
+      {/* ✅ Fixed Navbar */}
+      <Nav user={plainUser} />
     </div>
   );
 }
